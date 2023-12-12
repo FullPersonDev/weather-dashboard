@@ -39,22 +39,25 @@ function getAPI() {
     })
     .then(function(data) {
         console.log(data);
+        //Grabs the temp, wind, humidity values from the API fetch and places them into the webpage:
+        var tempResult = data.list[0].main.temp;
+        var humidityResult = data.list[0].main.humidity;
+        var windResult = data.list[0].wind.speed;
+        var dateResult = data.list[0].dt_txt;
+
+        temp.textContent = tempResult + ' ℉';
+        wind.textContent = windResult + ' MPH';
+        humidity.textContent = humidityResult + ' %';
+
+        //Adds city input into weather stats div
+        cityResult.textContent = cityValue + ' ('+dateResult+')';
+    
+        //Adds city input into the recent searched cities, as a button
+        var cityRecentItem = document.createElement('button');
+        cityRecentItem.textContent = cityValue;
+        recentSearchDiv.appendChild(cityRecentItem);
     });
-
-    //Adds city input into weather stats div
-    cityResult.textContent = cityValue;
-
-    //Adds city input into the recent searched cities, as a button
-    var cityRecentItem = document.createElement('button');
-    cityRecentItem.textContent = cityValue;
-    recentSearchDiv.appendChild(cityRecentItem);
-
-
 }
 
+//Event listener for the 'search' button and run getAPI function
 searchBtn.addEventListener('click', getAPI);
-
-//Function to retrive API data based on user city input
-
-
-//Event listener for the 'search' button
