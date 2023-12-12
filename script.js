@@ -15,7 +15,7 @@ function getAPI() {
     cityValue = cityInput.value;
     //Variable to capture the API URL
     var apiKey = '70a60e1ab06b68a17e3d748769c9f86a'
-    var requestURLGeo = 'http://api.openweathermap.org/geo/1.0/direct?q='+cityValue+'&limit=1&appid='+apiKey;
+    var requestURLGeo = 'https://api.openweathermap.org/geo/1.0/direct?q='+cityValue+'&limit=1&appid='+apiKey;
     
     fetch(requestURLGeo)
     .then(function (response) {
@@ -30,7 +30,7 @@ function getAPI() {
 
         //This block of code creates the second API fetch request based on variables from the first API fetch.
         //This block of code is getting the weather of the city input.
-        var requestURLWeather = 'http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&appid='+apiKey+'&units=imperial';
+        var requestURLWeather = 'https://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&appid='+apiKey+'&units=imperial';
 
         return fetch(requestURLWeather);
         })
@@ -43,14 +43,14 @@ function getAPI() {
         var tempResult = data.list[0].main.temp;
         var humidityResult = data.list[0].main.humidity;
         var windResult = data.list[0].wind.speed;
-        var dateResult = data.list[0].dt_txt;
+        var dateResult = data.list[0].dt_txt.split(' ')[0];
 
         temp.textContent = tempResult + ' ℉';
         wind.textContent = windResult + ' MPH';
         humidity.textContent = humidityResult + ' %';
 
         //Adds city input into weather stats div
-        cityResult.textContent = cityValue;
+        cityResult.textContent = cityValue + ' (' + dateResult + ')';
     
         //Adds city input into the recent searched cities, as a button
         var cityRecentItem = document.createElement('button');
