@@ -12,7 +12,7 @@ var fiveDayDiv = document.getElementById('fiveday');
 function getAPI() {
     //This block of code; including cityValue variable, requestURL,
     //and fetch function work to get the lat and lon of a city name input.
-    cityValue = cityInput.value;
+    var cityValue = cityInput.value;
     //Variable to capture the API URL
     var apiKey = '70a60e1ab06b68a17e3d748769c9f86a'
     var requestURLGeo = 'https://api.openweathermap.org/geo/1.0/direct?q='+cityValue+'&limit=1&appid='+apiKey;
@@ -55,6 +55,11 @@ function getAPI() {
         //Adds city input into the recent searched cities, as a button
         var cityRecentItem = document.createElement('button');
         cityRecentItem.textContent = cityValue;
+        //When a recent searched city button is clicked, it runs the getAPI function again to fetch weather.
+        cityRecentItem.addEventListener('click', function () {
+            cityInput.value = cityValue;
+            getAPI();
+        });
         recentSearchDiv.appendChild(cityRecentItem);
 
         //Display 5-day forecast
