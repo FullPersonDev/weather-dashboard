@@ -13,3 +13,4 @@ Simply type in the city name and click search.
 
 Here is a screenshot of the deployed website:
 
+![deployed website](./webpage.PNG)
