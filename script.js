@@ -50,13 +50,70 @@ function getAPI() {
         humidity.textContent = humidityResult + ' %';
 
         //Adds city input into weather stats div
-        cityResult.textContent = cityValue + ' ('+dateResult+')';
+        cityResult.textContent = cityValue;
     
         //Adds city input into the recent searched cities, as a button
         var cityRecentItem = document.createElement('button');
         cityRecentItem.textContent = cityValue;
         recentSearchDiv.appendChild(cityRecentItem);
+
+        //Display 5-day forecast
+        displayFiveDayForecast(data.list);
     });
+}
+
+function displayFiveDayForecast(fiveDayData) {
+    //Clears previous forecast
+    fiveDayDiv.innerHTML = '';
+
+    //Add a title for the 5-day Forecast
+    var title = document.createElement('h3');
+    title.textContent = '5-Day Forecast:';
+    fiveDayDiv.appendChild(title);
+
+    //Create a container for the 5-day forecast cards
+    var forecastContainer = document.createElement('div');
+    forecastContainer.classList.add('forecast-container');
+
+    //Displays each day's forecast
+    for (var i = 0; i < fiveDayData.length; i += 8) {
+        var dayData = fiveDayData[i];
+
+        //create a card for each day's forecast
+        var dayCard = document.createElement('div');
+        dayCard.classList.add('card');
+        //create elements for each day's forecast
+        var cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+
+        var dateP = document.createElement('p');
+        dateP.textContent = dayData.dt_txt.split(' ')[0];
+        cardBody.appendChild(dateP);
+
+        var iconImg = document.createElement('img');
+        iconImg.src = 'https://openweathermap.org/img/w/' + dayData.weather[0].icon + '.png';
+        cardBody.appendChild(iconImg);
+
+        var tempP = document.createElement('p');
+        tempP.textContent = 'Temp: ' + dayData.main.temp + ' ℉';
+        cardBody.appendChild(tempP);
+
+        var windP = document.createElement('p');
+        windP.textContent = 'Wind: ' + dayData.wind.speed + ' MPH';
+        cardBody.appendChild(windP);
+
+        var humidityP = document.createElement('p');
+        humidityP.textContent = 'Humidity: ' + dayData.main.humidity + ' %';
+        cardBody.appendChild(humidityP);
+
+        dayCard.appendChild(cardBody);
+
+        //Append teh day's forecast card to the container
+        forecastContainer.appendChild(dayCard);
+
+    }
+    //Append the forecast card container to the 5-day forecast div
+    fiveDayDiv.appendChild(forecastContainer);
 }
 
 //Event listener for the 'search' button and run getAPI function
