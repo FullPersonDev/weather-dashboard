@@ -30,7 +30,7 @@ function getAPI() {
 
         //This block of code creates the second API fetch request based on variables from the first API fetch.
         //This block of code is getting the weather of the city input.
-        var requestURLWeather = 'http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&appid='+apiKey;
+        var requestURLWeather = 'http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&appid='+apiKey+'&units=imperial';
 
         return fetch(requestURLWeather);
         })
@@ -48,6 +48,8 @@ function getAPI() {
     var cityRecentItem = document.createElement('button');
     cityRecentItem.textContent = cityValue;
     recentSearchDiv.appendChild(cityRecentItem);
+
+
 }
 
 searchBtn.addEventListener('click', getAPI);
