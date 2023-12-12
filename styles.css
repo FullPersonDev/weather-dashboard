@@ -41,3 +41,8 @@ button {
     background-color: rgb(78, 78, 247);
     color: white;
 }
+#recentsearch {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}

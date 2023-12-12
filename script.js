@@ -15,19 +15,39 @@ function getAPI() {
     cityValue = cityInput.value;
     //Variable to capture the API URL
     var apiKey = '70a60e1ab06b68a17e3d748769c9f86a'
-    var requestURL = 'http://api.openweathermap.org/geo/1.0/direct?q='+cityValue+'&limit=1&appid='+apiKey;
+    var requestURLGeo = 'http://api.openweathermap.org/geo/1.0/direct?q='+cityValue+'&limit=1&appid='+apiKey;
+    
+    fetch(requestURLGeo)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        var lat = data[0].lat;
+        var lon = data[0].lon;
+        console.log(lat);
+        console.log(lon);
 
-    fetch(requestURL)
-        .then(function (response) {
-            return response.json();
+        //This block of code creates the second API fetch request based on variables from the first API fetch.
+        //This block of code is getting the weather of the city input.
+        var requestURLWeather = 'http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&appid='+apiKey;
+
+        return fetch(requestURLWeather);
         })
-        .then(function (data) {
-            console.log(data)
-            var lat = data[0].lat;
-            var lon = data[0].lon;
-            console.log(lat);
-            console.log(lon);
-        });
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data);
+    });
+
+    //Adds city input into weather stats div
+    cityResult.textContent = cityValue;
+
+    //Adds city input into the recent searched cities, as a button
+    var cityRecentItem = document.createElement('button');
+    cityRecentItem.textContent = cityValue;
+    recentSearchDiv.appendChild(cityRecentItem);
 }
 
 searchBtn.addEventListener('click', getAPI);
