@@ -12,7 +12,18 @@ const apiKey = '70a60e1ab06b68a17e3d748769c9f86a';
 const requestGeoURL = `https://api.openweathermap.org/data/2.5/weather`;
 //Variable for request URL for weather
 const requestForecastURL = 'https://api.openweathermap.org/data/2.5/forecast';
-
+//Function to create button for recent search
+function createBtnRecentSearch(city) {
+    //create button
+    const btnEl = document.createElement('button');
+    //set attributes
+    btnEl.setAttribute('type', 'button');
+    btnEl.setAttribute('class', 'btn btn-light mx-1');
+    //set text
+    btnEl.textContent = city;
+    //append
+    btnsRecentSearches.append(btnEl);
+}
 //Function to create current weather card
 function createCardCurrentWeather(record) {
     //create elements
@@ -119,8 +130,34 @@ function getAPI(city) {
         })
         .catch(error => console.error('Error:', error));
 }
-//Event listener
+//Event listeners
+//On main search button
 btnSearch.addEventListener('click', function(event) {
+    if (cityInput.value === '') {
+        event.preventDefault();
+        divCurrentTitle.textContent = 'Please provide a city name for weather';
+        divResultsCurrent.textContent = '';
+        divForecastTitle.textContent = '';
+        divResultsForecast.textContent = '';
+    } else {
+        //empty content to get ready
+        divCurrentTitle.textContent = '';
+        divResultsCurrent.textContent = '';
+        divForecastTitle.textContent = '';
+        divResultsForecast.textContent = '';
+        
+        event.preventDefault();
+        //run function to get weather for city input
+        getAPI(cityInput.value);
+        //run function to create recent search button
+        createBtnRecentSearch(cityInput.value);
+    
+        //empty cityInput content
+        cityInput.value = '';
+    }
+});
+//On dynamically created buttons
+btnsRecentSearches.addEventListener('click', function(event) {
     //empty content to get ready
     divCurrentTitle.textContent = '';
     divResultsCurrent.textContent = '';
@@ -128,8 +165,9 @@ btnSearch.addEventListener('click', function(event) {
     divResultsForecast.textContent = '';
     
     event.preventDefault();
-    getAPI(cityInput.value);
+    //run function to get weather for city input
+    getAPI(event.target.textContent);
 
     //empty cityInput content
     cityInput.value = '';
-});
+})
