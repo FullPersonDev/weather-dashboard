@@ -48,9 +48,9 @@ function createCardCurrentWeather(record) {
     const imgEl = document.createElement('img');
 
     //set attributes
-    divCol.setAttribute('class', 'col');
-    divCard.setAttribute('class', 'card ms-1 my-3 shadow bg-body-tertiary rounded');
-    divCard.style.minWidth = '340px';
+    divCol.setAttribute('class', 'col py-3');
+    divCard.setAttribute('class', 'card shadow bg-body-tertiary rounded');
+    divCard.style.minWidth = '300px';
     h5El.setAttribute('class', 'card-header mb-2');
     h6ElToday.setAttribute('class', 'card-subtitle mt-1');
     divCardBody.setAttribute('class', 'card-body d-flex justify-content-between');
@@ -93,9 +93,9 @@ function createCardsForcast(record) {
     const iconURL = `https://openweathermap.org/img/wn/${record.weather[0].icon}@2x.png`;
     const imgEl = document.createElement('img');
     //set attributes
-    divCol.setAttribute('class', 'col');
-    divCard.setAttribute('class', 'card ms-1 my-3 shadow bg-body-tertiary rounded');
-    divCard.style.minWidth = '340px';
+    divCol.setAttribute('class', 'col py-3');
+    divCard.setAttribute('class', 'card shadow bg-body-tertiary rounded');
+    divCard.style.minWidth = '300px';
     h5El.setAttribute('class', 'card-header mb-2');
     divCardBody.setAttribute('class', 'card-body d-flex justify-content-between');
     imgEl.setAttribute('src', iconURL);
