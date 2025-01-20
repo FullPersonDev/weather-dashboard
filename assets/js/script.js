@@ -5,20 +5,23 @@ const divResultsCurrent = document.getElementById('resultsCurrent');
 const divResultsForecast = document.getElementById('resultsForecast');
 const divCurrentTitle = document.getElementById('currentTitle');
 const divForecastTitle = document.getElementById('forecastTitle');
+const recentSearchesTitle = document.getElementById('recentSearchesTitle');
 const btnsRecentSearches = document.getElementById('recentSearches');
+
 //API Key
 const apiKey = '70a60e1ab06b68a17e3d748769c9f86a';
 //Variable for request URL for city lat & lon
 const requestGeoURL = `https://api.openweathermap.org/data/2.5/weather`;
 //Variable for request URL for weather
 const requestForecastURL = 'https://api.openweathermap.org/data/2.5/forecast';
+
 //Function to create button for recent search
 function createBtnRecentSearch(city) {
     //create button
     const btnEl = document.createElement('button');
     //set attributes
     btnEl.setAttribute('type', 'button');
-    btnEl.setAttribute('class', 'btn btn-light mx-1');
+    btnEl.setAttribute('class', 'btn btn-light mx-1 text-body-secondary');
     //set text
     btnEl.textContent = city;
     //append
@@ -33,7 +36,7 @@ function createCardCurrentWeather(record) {
     const h5El = document.createElement('h5');
     const h6ElToday = document.createElement('h6');
     const divCardBody = document.createElement('div');
-    const pElTemp = document.createElement('p');
+    const h5ElTemp = document.createElement('h5');
     const pElTempFeelsLike = document.createElement('p');
     const pElWeatherDesc = document.createElement('p');
     const pElHumidity = document.createElement('p');
@@ -49,27 +52,27 @@ function createCardCurrentWeather(record) {
     h4El.textContent = record.name;
     h5El.textContent = 'Now';
     h6ElToday.textContent = dayjs().format('dddd, MMMM D - h a');
-    pElTemp.textContent = `Temp: ${Math.trunc(record.main.temp)} °`;
+    h5ElTemp.textContent = `${Math.trunc(record.main.temp)} °`;
     pElTempFeelsLike.textContent = `Feels Like: ${Math.trunc(record.main.feels_like)} °`;
-    pElWeatherDesc.textContent = `${record.weather[0].description}`;
+    pElWeatherDesc.textContent = record.weather[0].description.charAt(0).toUpperCase() + record.weather[0].description.slice(1);
     pElHumidity.textContent = `Humidity: ${record.main.humidity}`;
     pElWeatherIcon.textContent = record.weather[0].icon;
     //append
-    divCardBody.append(pElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
+    divCardBody.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
     h5El.append(h6ElToday);
     divCard.append(h5El, divCardBody);
     divCol.append(divCard)
     divCurrentTitle.append(h4El);
     divResultsCurrent.append(divCol);
 }
-//Function to create cards on webpage
+//Function to create forecast cards
 function createCardsForcast(record) {
     //create elements
     const divCol = document.createElement('div');
     const divCard = document.createElement('div');
     const h5El = document.createElement('h5');
     const divCardBody = document.createElement('div');
-    const pElTemp = document.createElement('p');
+    const h5ElTemp = document.createElement('h5');
     const pElTempFeelsLike = document.createElement('p');
     const pElWeatherDesc = document.createElement('p');
     const pElHumidity = document.createElement('p');
@@ -81,17 +84,18 @@ function createCardsForcast(record) {
     divCardBody.setAttribute('class', 'card-body');
     //set text
     h5El.textContent = `${dayjs(record.dt_txt).format('dddd - h a')}`;
-    pElTemp.textContent = `High/Low: ${Math.trunc(record.main.temp_max)} ° / ${Math.trunc(record.main.temp_min)} °`;
+    h5ElTemp.textContent = `${Math.trunc(record.main.temp)} °`;
     pElTempFeelsLike.textContent = `Feel Like: ${Math.trunc(record.main.feels_like)} °`;
-    pElWeatherDesc.textContent = `${record.weather[0].description}`;
+    pElWeatherDesc.textContent = record.weather[0].description.charAt(0).toUpperCase() + record.weather[0].description.slice(1);
     pElHumidity.textContent = `Humidity: ${record.main.humidity}`;
     pElWeatherIcon.textContent = record.weather[0].icon;
     //append
-    divCardBody.append(pElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
+    divCardBody.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
     divCard.append(h5El, divCardBody);
     divCol.append(divCard)
     divResultsForecast.append(divCol);
 }
+
 //Function to fetch api data
 function getAPI(city) {
     fetch(`${requestGeoURL}?q=${city}&appid=${apiKey}&units=imperial`)
@@ -130,6 +134,7 @@ function getAPI(city) {
         })
         .catch(error => console.error('Error:', error));
 }
+
 //Event listeners
 //On main search button
 btnSearch.addEventListener('click', function(event) {
@@ -145,6 +150,9 @@ btnSearch.addEventListener('click', function(event) {
         divResultsCurrent.textContent = '';
         divForecastTitle.textContent = '';
         divResultsForecast.textContent = '';
+        recentSearchesTitle.textContent = '';
+
+        recentSearchesTitle.textContent = 'Recent Searches';
         
         event.preventDefault();
         //run function to get weather for city input

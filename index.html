@@ -13,18 +13,18 @@
     </head>
     <body>
         <header>
-            <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <a class="navbar-brand">Weather Dashboard</a>
+            <nav class="p-2 bg-body-secondary">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
+                  <h5 class="text-primary">Weather Dashboard</h5>
                   <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="City Name" aria-label="Search" id="cityInput">
                     <button class="btn btn-outline-success" type="submit" id="search">Search</button>
                   </form>
                 </div>
             </nav>
-            <div id="recentSearchesContainer" class="bg-body-tertiary">
-                <h6>Recent Searches:</h6>
-                <div id="recentSearches" class="btn-group" role="group" aria-label="Basic example"></div>
+            <div id="recentSearchesContainer" class="bg-body-tertiary d-flex flex-column align-items-md-end">
+                <h6 id="recentSearchesTitle" class="px-2 text-body-tertiary"></h6>
+                <div id="recentSearches" class="d-flex flex-wrap" role="group" aria-label="Basic example"></div>
             </div>
         </header>
 
