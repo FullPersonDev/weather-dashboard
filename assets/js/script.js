@@ -36,29 +36,39 @@ function createCardCurrentWeather(record) {
     const h5El = document.createElement('h5');
     const h6ElToday = document.createElement('h6');
     const divCardBody = document.createElement('div');
+    const divCardBodyLeft = document.createElement('div');
+    const divCardBodyRight = document.createElement('div');
     const h5ElTemp = document.createElement('h5');
     const pElTempFeelsLike = document.createElement('p');
     const pElWeatherDesc = document.createElement('p');
     const pElHumidity = document.createElement('p');
     const pElWeatherIcon = document.createElement('p');
+    //create icon image
+    const iconURL = `https://openweathermap.org/img/wn/${record.weather[0].icon}@2x.png`;
+    const imgEl = document.createElement('img');
+
     //set attributes
     divCol.setAttribute('class', 'col');
-    divCard.setAttribute('class', 'card mx-4 my-4 shadow bg-body-tertiary rounded');
+    divCard.setAttribute('class', 'card ms-1 my-3 shadow bg-body-tertiary rounded');
+    divCard.style.minWidth = '340px';
     h5El.setAttribute('class', 'card-header mb-2');
     h6ElToday.setAttribute('class', 'card-subtitle mt-1');
-    divCardBody.setAttribute('class', 'card-body');
-    h4El.setAttribute('class', 'ms-4 mt-4');
+    divCardBody.setAttribute('class', 'card-body d-flex justify-content-between');
+    h4El.setAttribute('class', 'ms-3 mt-4');
+    imgEl.setAttribute('src', iconURL);
     //set text
     h4El.textContent = record.name;
     h5El.textContent = 'Now';
-    h6ElToday.textContent = dayjs().format('dddd, MMMM D - h a');
+    h6ElToday.textContent = dayjs().format('dddd, MMMM D');
     h5ElTemp.textContent = `${Math.trunc(record.main.temp)} °`;
     pElTempFeelsLike.textContent = `Feels Like: ${Math.trunc(record.main.feels_like)} °`;
     pElWeatherDesc.textContent = record.weather[0].description.charAt(0).toUpperCase() + record.weather[0].description.slice(1);
-    pElHumidity.textContent = `Humidity: ${record.main.humidity}`;
-    pElWeatherIcon.textContent = record.weather[0].icon;
+    pElHumidity.textContent = `Humidity: ${record.main.humidity}%`;
     //append
-    divCardBody.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
+    pElWeatherIcon.append(imgEl);
+    divCardBodyLeft.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity);
+    divCardBodyRight.append(pElWeatherIcon);
+    divCardBody.append(divCardBodyLeft, divCardBodyRight);
     h5El.append(h6ElToday);
     divCard.append(h5El, divCardBody);
     divCol.append(divCard)
@@ -72,25 +82,34 @@ function createCardsForcast(record) {
     const divCard = document.createElement('div');
     const h5El = document.createElement('h5');
     const divCardBody = document.createElement('div');
+    const divCardBodyLeft = document.createElement('div');
+    const divCardBodyRight = document.createElement('div');
     const h5ElTemp = document.createElement('h5');
     const pElTempFeelsLike = document.createElement('p');
     const pElWeatherDesc = document.createElement('p');
     const pElHumidity = document.createElement('p');
     const pElWeatherIcon = document.createElement('p');
+    //create icon image
+    const iconURL = `https://openweathermap.org/img/wn/${record.weather[0].icon}@2x.png`;
+    const imgEl = document.createElement('img');
     //set attributes
     divCol.setAttribute('class', 'col');
-    divCard.setAttribute('class', 'card mx-4 my-4 shadow bg-body-tertiary rounded');
+    divCard.setAttribute('class', 'card ms-1 my-3 shadow bg-body-tertiary rounded');
+    divCard.style.minWidth = '340px';
     h5El.setAttribute('class', 'card-header mb-2');
-    divCardBody.setAttribute('class', 'card-body');
+    divCardBody.setAttribute('class', 'card-body d-flex justify-content-between');
+    imgEl.setAttribute('src', iconURL);
     //set text
-    h5El.textContent = `${dayjs(record.dt_txt).format('dddd - h a')}`;
+    h5El.textContent = `${dayjs(record.dt_txt).format('dddd - A')}`;
     h5ElTemp.textContent = `${Math.trunc(record.main.temp)} °`;
     pElTempFeelsLike.textContent = `Feel Like: ${Math.trunc(record.main.feels_like)} °`;
     pElWeatherDesc.textContent = record.weather[0].description.charAt(0).toUpperCase() + record.weather[0].description.slice(1);
-    pElHumidity.textContent = `Humidity: ${record.main.humidity}`;
-    pElWeatherIcon.textContent = record.weather[0].icon;
+    pElHumidity.textContent = `Humidity: ${record.main.humidity}%`;
     //append
-    divCardBody.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity, pElWeatherIcon);
+    pElWeatherIcon.append(imgEl);
+    divCardBodyLeft.append(h5ElTemp, pElTempFeelsLike, pElWeatherDesc, pElHumidity);
+    divCardBodyRight.append(pElWeatherIcon);
+    divCardBody.append(divCardBodyLeft, divCardBodyRight);
     divCard.append(h5El, divCardBody);
     divCol.append(divCard)
     divResultsForecast.append(divCol);
@@ -123,14 +142,15 @@ function getAPI(city) {
             console.log(data)
             //create forecast title element, set attributes and text, and append
             const h4El = document.createElement('h4');
-            h4El.setAttribute('class', 'ms-4 mt-4');
+            h4El.setAttribute('class', 'ms-3 mt-4');
             h4El.textContent = '5-Day Forecast:';
             divForecastTitle.append(h4El);
-            //grab the forecast array from the data
-            const arrayListForecast = data.list;
-            console.log(arrayListForecast);
-            //loop through forecase array and create cards
-            arrayListForecast.forEach(record => createCardsForcast(record));
+
+            //grab the forecast array from data, and filter it to return only 9am or 3pm records
+            const filteredForecast = data.list.filter(item => 
+                item.dt_txt.includes('09:00:00') || item.dt_txt.includes('15:00:00')
+            );
+            filteredForecast.forEach(record => createCardsForcast(record));
         })
         .catch(error => console.error('Error:', error));
 }
@@ -178,4 +198,4 @@ btnsRecentSearches.addEventListener('click', function(event) {
 
     //empty cityInput content
     cityInput.value = '';
-})
+});
